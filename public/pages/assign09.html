@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../stylesheets/bootstrap/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <header class="navbar navbar-expand-sm bg-light navbar-light">
+        <div class="container">
+            <a class="navbar-brand mb-0 h1 text-dark" href="assign09.html">Kiki's Delivery Service</a>
+        </div>
+    </header>
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-md-4">
+                <img class="img-fluid" src="../resources/kiki.jpg" alt="" width="350" height="525">
+            </div>
+            <div class="col-sm-8 col-md-8">
+                <form id="packageInfo">
+                    <h2>Get your First Class rate now!</h2>
+                    <br>
+                    <div class="form-group">
+                        <label for="weight"> Weight (ounces):</label>
+                        <input class="form-control" type="number" placeholder="Item's Weight" id="weight"
+                            name="weight" required>
+                        <p id="weight-error">
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <label>Types: </label><br>
+                        <input type="radio" id="stamped" name="mail-type" value="stamped" required>
+                        <label for="stamped">Letters (Stamped) (not over 3.5 oz)</label><br>
+                        <input type="radio" id="metered" name="mail-type" value="metered">
+                        <label for="metered">Letters (Metered) (not over 3.5 oz)</label><br>
+                        <input type="radio" id="flats" name="mail-type" value="flats">
+                        <label for="flats">Large Envelopes (Flats)</label><br>
+                        <input type="radio" id="package" name="mail-type" value="package">
+                        <label for="package">First-Class Package Service—Retail</label><br>
+
+                        <p id="type-error">
+                        </p>
+                    </div>
+
+                    <button class="btn btn-primary" type="button" id="submit">Submit</button>
+                </form>
+
+                <div class="container" id="result">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <script>
+        document.getElementById("submit").addEventListener("click", makeRequest);
+        function makeRequest() {
+            let weight = document.getElementById("weight").value;
+            let mailType = "";
+            
+            mailTypes = document.getElementsByName("mail-type");
+            for (mT of mailTypes) {
+                if (mT.checked) {
+                    mailType = mT.value;
+                }
+            }
+            
+            let requestURL = "/getRate";
+            let getRateQuery = "weight=" + weight + "&type=" + mailType;
+
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("result").innerHTML = this.responseText;
+                }
+            }
+
+            xhr.open("POST", requestURL, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(getRateQuery);
+        }
+
+        document.getElementById("weight").addEventListener("change", limitOptions);
+        function limitOptions() {
+            let el = document.getElementById("weight");
+            if (el.value > 3.5) {
+                document.getElementById("stamped").checked = false;
+                document.getElementById("metered").checked = false;
+                document.getElementById("stamped").disabled = true;
+                document.getElementById("metered").disabled = true;
+            }
+            else {
+                document.getElementById("stamped").disabled = false;
+                document.getElementById("metered").disabled = false;
+            }
+        }
+
+
+    </script>
+    <!--Bootstrap javascript files-->
+</body>
+
+</html>

@@ -1,23 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../stylesheets/bootstrap/css/bootstrap.min.css">
     <title>Document</title>
 </head>
+
 <body>
-    <form>
-        <input type="number" placeholder="First number" id="first_number" name="n1">
-        <input type="number" placeholder="Second number" id="second_number" name="n2">
-        <br>
-        <input type="checkbox" id="getJSON" name="getJSON">
-        <label for="getJSON">Get JSON result</label>
-        <button type="button" id="add">Submit</button>
-    </form>
-    <div id="result">
+    <header class="navbar navbar-expand-sm bg-light navbar-light">
+        <div class="container">
+            <a class="navbar-brand mb-0 h1 text-dark" href="main.php">myScriptures</a>
+        </div>
+    </header>
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-md-4">
+                <img src="" alt="" width="350" height="350">
+            </div>
+            <div class="col-sm-8 col-md-8">
+                <form>
+                    <h2>Add Calculator</h2>
+                    <div class="form-group">
+                        <input class="form-control" type="number" placeholder="First number" id="first_number"
+                            name="n1">
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" type="number" placeholder="Second number" id="second_number"
+                            name="n2">
+                    </div>
+
+                    <br>
+                    <div class="form-group">
+                        <input type="checkbox" id="getJSON" name="getJSON">
+                        <label for="getJSON">Get JSON result</label>
+                    </div>
+
+                    <button class="btn btn-primary" type="button" id="add">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="result">
 
     </div>
-    
+
     <script>
         document.getElementById("add").addEventListener("click", makeRequest);
         function makeRequest() {
@@ -44,6 +74,15 @@
             xhr.send(addQuery);
         }
     </script>
-
+    <!--Bootstrap javascript files-->
+    <script src="js/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="js/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

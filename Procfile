@@ -1,1 +1,1 @@
-web: node teamActivity.js
+web: node index.js
