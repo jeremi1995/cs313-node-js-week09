@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <input type="number" placeholder="First number" id="first_number" name="n1">
+        <input type="number" placeholder="Second number" id="second_number" name="n2">
+        <br>
+        <input type="checkbox" id="getJSON" name="getJSON">
+        <label for="getJSON">Get JSON result</label>
+        <button type="button" id="add">Submit</button>
+    </form>
+    <div id="result">
+
+    </div>
+    
+    <script>
+        document.getElementById("add").addEventListener("click", makeRequest);
+        function makeRequest() {
+            let n1 = document.getElementById("first_number").value;
+            let n2 = document.getElementById("second_number").value;
+            let requestURL = "/math";
+
+            let getJSON = document.getElementById("getJSON");
+            if (getJSON.checked) {
+                requestURL = "/math_service";
+            }
+
+            let addQuery = "n1=" + n1 + "&n2=" + n2;
+
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("result").innerHTML = this.responseText;
+                }
+            }
+
+            xhr.open("POST", requestURL, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(addQuery);
+        }
+    </script>
+
+</body>
+</html>
