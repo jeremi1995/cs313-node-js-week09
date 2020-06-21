@@ -16,11 +16,26 @@ app.get("/", (req, res) => {
   res.render("pages/assign09-welcome");
 });
 
+app.get("/assign09", (req, res) => {
+  console.log("Received request for " + req.url);
+
+  res.render("pages/assign09");
+});
+
 app.post("/getRate", (req, res) => {
   console.log("Received request for " + req.url);
-  let rate = calculateRate(Number(req.body.weight), req.body.type);
+  let type = typeToString(req.body.type);
+  let weight = Number(req.body.weight);
+  let rate = 0;
 
-  let param = { result: rate.toFixed(2) };
+  if (req.body.zone) {
+    rate = calculateRate(req.body.type, weight, req.body.zone);
+  }
+  else {
+    rate = calculateRate(req.body.type, weight)
+  }
+
+  let param = { result: rate.toFixed(2), mailType: type, weight: weight };
   res.render("partials/assign09-postageDisplay", param);
 });
 
@@ -40,6 +55,9 @@ function rateStamped(weight) {
   else if (weight > 3 && weight <= 3.5) {
     return 1.00;
   }
+  else {
+    return -1;
+  }
 }
 
 function rateMetered(weight) {
@@ -54,6 +72,9 @@ function rateMetered(weight) {
   }
   else if (weight > 3 && weight <= 3.5) {
     return 0.95;
+  }
+  else {
+    return -1;
   }
 }
 
@@ -97,27 +118,172 @@ function rateFlats(weight) {
   else if (weight > 12 && weight <= 13) {
     return 3.40;
   }
+  else {
+    return -1;
+  }
 }
 
-function ratePackage(weight) {
-  return 0.00;
+function ratePackage(weight, zone) {
+  if (zone == 1) {
+    if (weight >= 0 && weight <= 4) {
+      return 3.80;
+    }
+    else if (weight > 4 && weight <= 8) {
+      return 4.60;
+    }
+    else if (weight > 8 && weight <= 12) {
+      return 5.30;
+    }
+    else if (weight > 12 && weight <= 13) {
+      return 5.90;
+    }
+    else { return -1; }
+  }
+  else if (zone == 3) {
+    if (weight >= 0 && weight <= 4) {
+      return 3.85;
+    }
+    else if (weight > 4 && weight <= 8) {
+      return 4.65;
+    }
+    else if (weight > 8 && weight <= 12) {
+      return 5.35;
+    }
+    else if (weight > 12 && weight <= 13) {
+      return 5.95;
+    }
+    else { return -1; }
+  }
+  else if (zone == 4) {
+    if (weight >= 0 && weight <= 4) {
+      return 3.90;
+    }
+    else if (weight > 4 && weight <= 8) {
+      return 4.70;
+    }
+    else if (weight > 8 && weight <= 12) {
+      return 5.40;
+    }
+    else if (weight > 12 && weight <= 13) {
+      return 6.05;
+    }
+    else { return -1; }
+  }
+  else if (zone == 5) {
+    if (weight >= 0 && weight <= 4) {
+      return 3.95;
+    }
+    else if (weight > 4 && weight <= 8) {
+      return 4.75;
+    }
+    else if (weight > 8 && weight <= 12) {
+      return 5.45;
+    }
+    else if (weight > 12 && weight <= 13) {
+      return 6.15;
+    }
+    else { return -1; }
+  }
+  else if (zone == 6) {
+    if (weight >= 0 && weight <= 4) {
+      return 4.00;
+    }
+    else if (weight > 4 && weight <= 8) {
+      return 4.80;
+    }
+    else if (weight > 8 && weight <= 12) {
+      return 5.50;
+    }
+    else if (weight > 12 && weight <= 13) {
+      return 6.20;
+    }
+    else { return -1; }
+  }
+  else if (zone == 7) {
+    if (weight >= 0 && weight <= 4) {
+      return 4.05;
+    }
+    else if (weight > 4 && weight <= 8) {
+      return 4.90;
+    }
+    else if (weight > 8 && weight <= 12) {
+      return 5.65;
+    }
+    else if (weight > 12 && weight <= 13) {
+      return 6.40;
+    }
+    else { return -1; }
+  }
+  else if (zone == 8) {
+    if (weight >= 0 && weight <= 4) {
+      return 4.20;
+    }
+    else if (weight > 4 && weight <= 8) {
+      return 5.00;
+    }
+    else if (weight > 8 && weight <= 12) {
+      return 5.75;
+    }
+    else if (weight > 12 && weight <= 13) {
+      return 6.50;
+    }
+    else { return -1; }
+  }
+  else if (zone == 9) {
+    if (weight >= 0 && weight <= 4) {
+      return 4.20;
+    }
+    else if (weight > 4 && weight <= 8) {
+      return 5.00;
+    }
+    else if (weight > 8 && weight <= 12) {
+      return 5.75;
+    }
+    else if (weight > 12 && weight <= 13) {
+      return 6.50;
+    }
+    else { return -1; }
+  }
+  else {
+    return -1;
+  }
 }
 
-function calculateRate(weight, mailType) {
+function calculateRate(mailType, weight, zone = 1) {
   let rate = 0;
+  
+  console.log("calculateRate function entered");
+  console.log("mailType:" + mailType);
+  console.log("weight: " + weight);
+  console.log("zone: " + zone);
 
-    if (mailType == "stamped") {
-      rate = rateStamped(weight);
-    }
-    else if (mailType == "metered") {
-      rate = rateMetered(weight);
-    }
-    else if (mailType == "flats") {
-      rate = rateFlats(weight);
-    }
-    else if (mailType == "package") {
-      rate = ratePackage(weight);
-    }
+  if (mailType == "stamped") {
+    rate = rateStamped(weight);
+  }
+  else if (mailType == "metered") {
+    rate = rateMetered(weight);
+  }
+  else if (mailType == "flats") {
+    rate = rateFlats(weight);
+  }
+  else if (mailType == "package") {
+    rate = ratePackage(weight, zone);
+  }
 
   return rate;
+}
+
+function typeToString(type) {
+  switch (type) {
+    case "stamped":
+      return "Letters (Stamped)";
+    case "metered":
+      return "Letters (Metered)";
+    case "flats":
+      return "Large Envelopes (Flats)";
+    case "package":
+      return "First-Class Package Service—Retail";
+    default:
+      return "";
+  }
 }
